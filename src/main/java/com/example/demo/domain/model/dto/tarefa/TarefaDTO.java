@@ -9,6 +9,7 @@ public record TarefaDTO(
         boolean completado,
         LocalDate dataCriacao,
         int points,
+        Long missaoId,
         Long categoriaId,
         Long usuarioId
 ) {

@@ -3,6 +3,8 @@ package com.example.demo.controller.tarefa;
 import com.example.demo.domain.model.dto.tarefa.CategoriaSustentabilidadeDTO;
 import com.example.demo.domain.model.tarefa.CategoriaSustentabilidade;
 import com.example.demo.service.tarefa.CategoriaSustentabilidadeService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +14,8 @@ import java.util.List;
 @RequestMapping("/categorias")
 public class CategoriaSustentabilidadeController {
 
-    private final CategoriaSustentabilidadeService service;
-
-    public CategoriaSustentabilidadeController(CategoriaSustentabilidadeService service) {
-        this.service = service;
-    }
+    @Autowired
+    CategoriaSustentabilidadeService service;
 
     @GetMapping
     public List<CategoriaSustentabilidade> listarTodas() {
@@ -24,12 +23,12 @@ public class CategoriaSustentabilidadeController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaSustentabilidade> criar(@RequestBody CategoriaSustentabilidadeDTO dto) {
+    public ResponseEntity<CategoriaSustentabilidade> criar(@RequestBody @Valid CategoriaSustentabilidadeDTO dto) {
         return ResponseEntity.ok(service.criarCategoria(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaSustentabilidade> atualizar(@PathVariable Long id, @RequestBody CategoriaSustentabilidadeDTO dto) {
+    public ResponseEntity<CategoriaSustentabilidade> atualizar(@PathVariable Long id, @RequestBody @Valid CategoriaSustentabilidadeDTO dto) {
         return ResponseEntity.ok(service.atualizarCategoria(id, dto));
     }
 

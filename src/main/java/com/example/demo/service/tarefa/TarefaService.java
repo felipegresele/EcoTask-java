@@ -4,9 +4,11 @@ import com.example.demo.domain.model.dto.PageResponse;
 import com.example.demo.domain.model.dto.tarefa.TarefaDTO;
 import com.example.demo.domain.model.dto.tarefa.TarefaCriadaEvent;
 import com.example.demo.domain.model.tarefa.CategoriaSustentabilidade;
+import com.example.demo.domain.model.tarefa.MissaoSustentavel;
 import com.example.demo.domain.model.tarefa.Tarefa;
 import com.example.demo.domain.model.usuario.Usuario;
 import com.example.demo.repository.CategoriaSustentabilidadeRepository;
+import com.example.demo.repository.MissaoSustentavelRepository;
 import com.example.demo.repository.TarefaRepository;
 import com.example.demo.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class TarefaService {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    @Autowired
+    MissaoSustentavelRepository missaoSustentavelRepository;
 
     @Autowired
     CategoriaSustentabilidadeRepository categoriaSustentabilidadeRepository;
@@ -109,6 +114,10 @@ public class TarefaService {
         tarefa.setCompletado(dto.completado());
         tarefa.setDataCriacao(dto.dataCriacao());
         tarefa.setPoints(dto.points());
+
+        MissaoSustentavel missaoSustentavel = missaoSustentavelRepository.findById(dto.missaoId())
+                .orElseThrow(() -> new RuntimeException("Missão não encontrada com ID: " + dto.missaoId()));
+        tarefa.setMissao(missaoSustentavel);
 
         CategoriaSustentabilidade categoria = categoriaSustentabilidadeRepository.findById(dto.categoriaId())
                     .orElseThrow(() -> new RuntimeException("Categoria não encontrada com ID: " + dto.categoriaId()));

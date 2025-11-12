@@ -21,6 +21,10 @@ public class CacheConfig {
                 "tarefa",            // Cache para tarefa individual
                 "categorias",        // Cache para lista de categorias
                 "categoria",         // Cache para categoria individual
+                "recompensa",
+                "recompensas",
+                "missao",
+                "missoes",
                 "usuarios"           // Cache para lista de usuários
         );
         

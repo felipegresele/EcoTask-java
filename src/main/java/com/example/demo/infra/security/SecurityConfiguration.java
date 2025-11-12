@@ -38,11 +38,11 @@ public class SecurityConfiguration {
                         // Endpoints de cache - apenas ADMIN
                         .requestMatchers("/cache/**").hasRole("ADMIN")
                         // Operações de escrita (POST, PUT, DELETE) precisam de ADMIN
-                        .requestMatchers(HttpMethod.POST, "/tarefas", "/tarefas/**", "/categorias", "/categorias/**", "/usuarios", "/usuarios/**", "/api/assistant", "/api/assistant/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/tarefas/**", "/categorias/**", "/usuarios", "/usuarios/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/tarefas/**", "/categorias/**", "/usuarios", "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/tarefas", "/tarefas/**", "/categorias", "/categorias/**", "/usuarios", "/usuarios/**", "/recompensas", "/recompensas/**", "/missoes", "/missoes/**", "/api/assistant", "/api/assistant/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/tarefas/**", "/categorias/**", "/usuarios", "/usuarios/**", "/recompensas", "/recompensas/**", "/missoes", "/missoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/tarefas/**", "/categorias/**", "/usuarios", "/usuarios/**", "/recompensas", "/recompensas/**", "/missoes", "/missoes/**").hasRole("ADMIN")
                         // Operações de leitura (GET) precisam apenas de autenticação
-                        .requestMatchers(HttpMethod.GET, "/tarefas", "/tarefas/**", "/categorias", "/categorias/**", "/usuarios", "/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/tarefas", "/tarefas/**", "/categorias", "/categorias/**", "/usuarios", "/usuarios/**", "/recompensas", "/recompensas/**", "/missoes", "/missoes/**").authenticated()
                         // Qualquer outra requisição precisa de autenticação
                         .anyRequest().authenticated())
                 .httpBasic(httpBasic -> httpBasic.disable()) // Desabilita HTTP Basic

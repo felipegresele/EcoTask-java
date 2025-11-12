@@ -5,6 +5,7 @@ import com.example.demo.domain.model.dto.tarefa.TarefaDTO;
 import com.example.demo.domain.model.tarefa.Tarefa;
 import com.example.demo.service.tarefa.TarefaService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +15,8 @@ import java.util.List;
 @RequestMapping("/tarefas")
 public class TarefaController {
 
-    private final TarefaService service;
-
-    public TarefaController(TarefaService service) {
-        this.service = service;
-    }
+    @Autowired
+    TarefaService service;
 
     /**
      * Lista todas as tarefas sem paginação

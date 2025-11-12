@@ -28,6 +28,8 @@ public class Usuario implements UserDetails {
     private String email;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole role;
 
     public Usuario( String email, String password, UserRole role) {

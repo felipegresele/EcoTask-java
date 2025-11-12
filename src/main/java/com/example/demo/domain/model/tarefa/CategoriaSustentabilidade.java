@@ -2,6 +2,7 @@ package com.example.demo.domain.model.tarefa;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,14 @@ public class CategoriaSustentabilidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nome da categoria de sustentabilidade  não pode ser vazio")
+    @NotBlank(message = "Nome da categoria não pode ser vazio")
     private String nome;
 
+    @NotBlank(message = "Descrição da categoria não pode ser vazio")
     private String descricao;
 
+    @NotNull(message = "Nível de impacto da categoria não pode ser nulo")
+    @Enumerated(EnumType.STRING)
     private Nivel nivelImpacto;
 
 }
