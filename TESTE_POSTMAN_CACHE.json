@@ -1,0 +1,234 @@
+{
+  "info": {
+    "name": "Teste de Cache",
+    "description": "Collection para testar cache da aplicação"
+  },
+  "item": [
+    {
+      "name": "1. Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["auth", "login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    pm.environment.set('token', jsonData.token);",
+              "    console.log('Token salvo:', jsonData.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Listar Tarefas (1ª vez - CACHE MISS)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/tarefas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas"]
+        },
+        "description": "Primeira requisição - deve mostrar log [CACHE MISS] no console"
+      }
+    },
+    {
+      "name": "3. Listar Tarefas (2ª vez - CACHE HIT)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/tarefas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas"]
+        },
+        "description": "Segunda requisição - NÃO deve mostrar log (veio do cache)"
+      }
+    },
+    {
+      "name": "4. Criar Tarefa (INVALIDA CACHE)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Tarefa de teste de cache\",\n  \"descricao\": \"Testando invalidação de cache\",\n  \"completado\": false,\n  \"dataCriacao\": \"2024-01-15\",\n  \"points\": 10,\n  \"categoriaId\": 1,\n  \"usuarioId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/tarefas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas"]
+        },
+        "description": "Deve mostrar log [CACHE EVICT] no console"
+      }
+    },
+    {
+      "name": "5. Listar Tarefas (3ª vez - CACHE MISS após invalidação)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/tarefas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas"]
+        },
+        "description": "Deve mostrar log [CACHE MISS] novamente (cache foi invalidado)"
+      }
+    },
+    {
+      "name": "6. Buscar Tarefa por ID (CACHE MISS)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/tarefas/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas", "1"]
+        },
+        "description": "Primeira busca - deve mostrar log [CACHE MISS]"
+      }
+    },
+    {
+      "name": "7. Buscar Tarefa por ID (CACHE HIT)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/tarefas/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["tarefas", "1"]
+        },
+        "description": "Segunda busca - NÃO deve mostrar log (veio do cache)"
+      }
+    },
+    {
+      "name": "8. Listar Caches",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/cache",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["cache"]
+        },
+        "description": "Lista todos os caches disponíveis"
+      }
+    },
+    {
+      "name": "9. Limpar Cache de Tarefas",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/cache/tarefas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["cache", "tarefas"]
+        },
+        "description": "Limpa o cache de tarefas manualmente"
+      }
+    },
+    {
+      "name": "10. Limpar Todos os Caches",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/cache/clear",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["cache", "clear"]
+        },
+        "description": "Limpa todos os caches"
+      }
+    }
+  ]
+}
+
