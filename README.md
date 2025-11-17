@@ -23,18 +23,18 @@ Ele foi desenvolvido utilizando **Java + Spring Boot**, seguindo as melhores pr�
 13. [Coleção de Endpoints](#-coleção-de-endpoints)
 14. [Como Rodar o Projeto](#-como-rodar-o-projeto)
 15. [Deploy em Nuvem](#-deploy-em-nuvem)
-16. [Integrantes](#-integrantes-do-projeto)
+16. [Integrantes do Projeto](#-integrantes-do-projeto)
 
 ---
 
 # ✨ Principais Funcionalidades
 
 ✔ CRUD completo para:
-- Usuários  
-- Tarefas Sustentáveis  
-- Categorias  
-- Missões  
-- Recompensas  
+- Usuários
+- Tarefas Sustentáveis
+- Categorias
+- Missões
+- Recompensas
 
 ✔ Autenticação e autorização com **Spring Security + JWT**  
 ✔ Validações com **Bean Validation**  
@@ -52,14 +52,14 @@ Ele foi desenvolvido utilizando **Java + Spring Boot**, seguindo as melhores pr�
 
 - **Java 17**
 - **Spring Boot 3**
-- Spring Data JPA  
-- Spring Security + JWT  
-- Spring Cache  
-- Spring Validation  
-- Spring AI  
-- LangChain4J  
-- PostgreSQL  
-- Maven  
+- **Spring Data JPA**
+- **Spring Security + JWT**
+- **Spring Cache**
+- **Spring Validation**
+- **Spring AI**
+- **LangChain4J**
+- **PostgreSQL**
+- **Maven**
 
 ---
 
@@ -85,41 +85,52 @@ Copiar código
 
 # 🛠 Configuração do Ambiente
 
-No arquivo `application.properties`:
+Arquivo `application.properties`:
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/ecotask
 spring.datasource.username=postgres
 spring.datasource.password=senha
+
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
-📌 Banco utilizado: PostgreSQL
+🗄 Banco de Dados (PostgreSQL)
+O projeto utiliza um banco PostgreSQL.
 
+Criação do banco:
+
+sql
+Copiar código
+CREATE DATABASE ecotask;
 🔐 Autenticação e Segurança (JWT)
-A autenticação usa o prefixo /auth.
+A autenticação usa o prefixo:
 
-Endpoints públicos
+bash
+Copiar código
+/auth
+Endpoints Públicos
 bash
 Copiar código
 POST /auth/register
 POST /auth/login
-Após o login, você recebe um token JWT:
+Após o login, você receberá um token JWT:
 
 makefile
 Copiar código
 Authorization: Bearer SEU_TOKEN
-Endpoints protegidos
-Todos os outros endpoints exigem:
+Endpoints Protegidos
+Todos os demais endpoints exigem:
 
-✔ Autenticação
-✔ Role ADMIN
+✔ Token JWT válido
+✔ Role: ADMIN
+
 🌎 Internacionalização (i18n)
-Suporte a duas línguas:
+O projeto suporta duas línguas:
 
 Português (padrão)
 
-Inglês
+Inglês (en-US)
 
 Arquivos:
 
@@ -127,7 +138,7 @@ matlab
 Copiar código
 messages.properties
 messages_en.properties
-Para alterar a linguagem no Postman:
+Para trocar o idioma no Postman:
 
 makefile
 Copiar código
@@ -140,29 +151,28 @@ Copiar código
 @Cacheable
 @CacheEvict
 @Caching
-O cache melhora o desempenho em consultas frequentes.
+Usado para melhorar performance em endpoints com muitas leituras.
 
 ✔ Validações (Bean Validation)
-Usando anotações como:
+Exemplos usados:
 
+java
+Copiar código
 @NotBlank
-
 @Size
-
 @Email
-
 @NotNull
-
 @Positive
+Garantem integridade dos dados enviados ao sistema.
 
 📄 Paginação
-Endpoints com paginação seguem o formato padrão Spring:
+Padrão do Spring Boot:
 
 arduino
 Copiar código
 GET /tarefas?page=0&size=10
 🚫 Tratamento Global de Erros
-Retorno padrão:
+Retorno de erro estruturado:
 
 json
 Copiar código
@@ -172,40 +182,41 @@ Copiar código
   "details": "O nome não pode ser vazio"
 }
 🤖 IA Ambiental (Spring AI)
-Endpoint
+Endpoint da IA
 bash
 Copiar código
 POST /api/assistant
 Como usar no Postman
-Body JSON:
+Body → JSON:
 
 json
 Copiar código
-{
-  "message": "Me dê uma dica para economizar energia."
-}
-A IA responderá automaticamente.
 
-Serviço utilizado
+  "message": "Me dê uma dica de como economizar água."
+
+A IA responderá automaticamente usando o modelo LangChain4J.
+
+Serviço utilizado:
 java
 Copiar código
 @AiService
 public interface AssistantAiService {
 
     @SystemMessage("""
-        Você é uma inteligência artificial especializada em ajudar os usuários...
+        Você é uma inteligência artificial especializada em ajudar os usuários a entender e praticar ações que beneficiam o meio ambiente. 
+        Fale de forma positiva e responda apenas temas ligados à sustentabilidade.
+        Caso o usuário pergunte algo fora do tema, diga:
+        'Desculpe — só posso responder perguntas sobre tarefas e atitudes que ajudam a natureza.'
         """)
     Result<String> handleRequest(@UserMessage String userMessage);
 }
-A IA é treinada para falar exclusivamente sobre sustentabilidade.
-
 🔗 Coleção de Endpoints
 🔐 Autenticação
 bash
 Copiar código
 POST /auth/register
 POST /auth/login
-👤 Usuários (somente ADMIN)
+👤 Usuários (ADMIN)
 bash
 Copiar código
 GET    /usuarios
@@ -250,19 +261,18 @@ POST /api/assistant
 bash
 Copiar código
 git clone https://github.com/felipegresele/ecotask-java
-2. Criar o banco no PostgreSQL
-pgsql
+2. Criar o banco
+sql
 Copiar código
 CREATE DATABASE ecotask;
-3. Rodar a aplicação
-arduino
+3. Rodar o projeto
+bash
 Copiar código
 mvn spring-boot:run
 ☁ Deploy em Nuvem (Render)
+Configurar variáveis de ambiente (DB, JWT_SECRET, etc.)
 
-Link do deploy do projeto:  
-
-Configurar variáveis de ambiente
+Subir como serviço Web Java 21
 
 👨‍💻 Integrantes do Projeto
 Nome	RM
