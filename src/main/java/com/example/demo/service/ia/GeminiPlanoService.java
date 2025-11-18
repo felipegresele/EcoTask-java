@@ -1,4 +1,5 @@
 package com.example.demo.service.ia;
+import com.example.demo.domain.model.dto.gemini.PlanRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -7,41 +8,28 @@ public class GeminiPlanoService {
 
     private final WebClient webClient;
 
-    // O Spring injeta o WebClient que configuramos no AppConfig
     public GeminiPlanoService(WebClient webClient) {
         this.webClient = webClient;
     }
 
     public String getSustainabilityPlan(String context, String goal) {
-        // Estrutura para os dados que sua API Python espera
-        class PlanRequest {
-            public String userContext;
-            public String sustainabilityGoal;
-            public PlanRequest(String uc, String sg) {
-                this.userContext = uc;
-                this.sustainabilityGoal = sg;
-            }
-        }
 
-        // Estrutura para a resposta JSON que sua API Python retorna
-        class PlanResponse {
-            // Deve ter o mesmo nome do campo JSON: "plan"
-            public String plan;
-            public String getPlan() { return plan; }
-            // Adicione um construtor vazio para desserialização
-            public PlanResponse() {}
-        }
+        // Usa a classe DTO externa
+        PlanRequest requestBody = new PlanRequest(context, goal);
 
         try {
+            // Adicionamos o .header("Content-Type", "application/json") como garantia,
+            // embora o bodyValue já o defina na maioria dos casos.
             return webClient.post()
                     .uri("/api/generate-plan")
-                    .bodyValue(new PlanRequest(context, goal))
+                    .bodyValue(requestBody)
                     .retrieve()
-                    .bodyToMono(PlanResponse.class) // Mapeia o JSON para o objeto Java
-                    .map(PlanResponse::getPlan)     // Extrai apenas o valor do campo "plan"
-                    .block();                       // Espera o resultado da API Python
+                    .bodyToMono(PlanResponse.class) // Mapeia o JSON para o Record PlanResponse
+                    .map(PlanResponse::plan)        // Extrai o valor do campo 'plan' do Record
+                    .block();
 
         } catch (Exception e) {
+            // O log de erro agora será mais claro se for um problema de comunicação real
             System.err.println("Erro ao chamar a API Flask: " + e.getMessage());
             return "Falha na comunicação com o serviço de IA.";
         }
