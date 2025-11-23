@@ -4,7 +4,7 @@ O EcoTask é um sistema completo para gerenciamento de tarefas e missões susten
 Ele foi desenvolvido utilizando Java + Spring Boot, seguindo as melhores práticas de arquitetura REST, segurança com JWT, persistência com Spring Data JPA e integração com IA usando Spring AI + LangChain4J.
 
 🎥 Vídeo de apresentação do projeto:  
-https://youtu.be/heo4NLxA2ls
+https://youtu.be/4tpEZfukbGY
 
 
 📌 Índice
